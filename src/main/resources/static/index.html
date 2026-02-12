@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cinema Control Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<div class="bg-noise"></div>
+<div class="app-shell">
+    <aside class="sider">
+        <div class="brand">
+            <div class="brand-logo">CP</div>
+            <div>
+                <p class="brand-title">Cinema Panel</p>
+                <p class="brand-subtitle">CRUD Workspace</p>
+            </div>
+        </div>
+
+        <nav class="menu" id="sectionMenu">
+            <button class="menu-item is-active" data-section="movies" type="button">
+                <span class="dot"></span>
+                Movies
+            </button>
+            <button class="menu-item" data-section="viewers" type="button">
+                <span class="dot"></span>
+                Viewers
+            </button>
+            <button class="menu-item" data-section="cinemas" type="button">
+                <span class="dot"></span>
+                Cinemas
+            </button>
+        </nav>
+
+        <div class="sider-note">
+            <p>Powered by Kaliyev Rauan.</p>
+            
+        </div>
+    </aside>
+
+    <main class="workspace">
+        <header class="workspace-header">
+            <div>
+                <p class="eyebrow">Admin Console</p>
+                <h1>Cinema Ticket Booking</h1>
+            </div>
+            <div class="timestamp">
+                <span class="pulse"></span>
+                <span id="lastSyncText">Sync pending</span>
+            </div>
+        </header>
+
+        <section class="metrics">
+            <article class="metric-card">
+                <p>Total Movies</p>
+                <h3 id="metricMovies">0</h3>
+            </article>
+            <article class="metric-card">
+                <p>Total Viewers</p>
+                <h3 id="metricViewers">0</h3>
+            </article>
+            <article class="metric-card">
+                <p>Total Cinemas</p>
+                <h3 id="metricCinemas">0</h3>
+            </article>
+        </section>
+
+        <section class="entity-section is-active" id="moviesSection" data-entity="movies">
+            <div class="entity-head">
+                <div>
+                    <h2>Movies</h2>
+                    <p>Manage catalog, age restrictions and ticket prices.</p>
+                </div>
+                <div class="entity-actions">
+                    <input type="search" class="control-input section-search" data-entity="movies" placeholder="Search title or description..." />
+                    <button class="btn btn-ghost" data-refresh="movies" type="button">Refresh</button>
+                    <button class="btn btn-primary" data-create="movies" type="button">Add movie</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table class="entity-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Duration</th>
+                        <th>Age</th>
+                        <th class="align-right">Price</th>
+                        <th class="align-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="moviesRows"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="entity-section" id="viewersSection" data-entity="viewers">
+            <div class="entity-head">
+                <div>
+                    <h2>Viewers</h2>
+                    <p>Track user profiles, ages and contact emails.</p>
+                </div>
+                <div class="entity-actions">
+                    <input type="search" class="control-input section-search" data-entity="viewers" placeholder="Search full name or email..." />
+                    <button class="btn btn-ghost" data-refresh="viewers" type="button">Refresh</button>
+                    <button class="btn btn-primary" data-create="viewers" type="button">Add viewer</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table class="entity-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th class="align-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="viewersRows"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="entity-section" id="cinemasSection" data-entity="cinemas">
+            <div class="entity-head">
+                <div>
+                    <h2>Cinemas</h2>
+                    <p>Configure cinema branches with location information.</p>
+                </div>
+                <div class="entity-actions">
+                    <input type="search" class="control-input section-search" data-entity="cinemas" placeholder="Search name, city or address..." />
+                    <button class="btn btn-ghost" data-refresh="cinemas" type="button">Refresh</button>
+                    <button class="btn btn-primary" data-create="cinemas" type="button">Add cinema</button>
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table class="entity-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>Address</th>
+                        <th class="align-right">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="cinemasRows"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div class="modal-overlay" id="entityModal" aria-hidden="true">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 id="entityModalTitle">Create</h3>
+            <button class="icon-btn" id="entityModalClose" type="button" aria-label="Close form">x</button>
+        </div>
+        <form id="entityForm" class="form-grid"></form>
+        <div class="modal-foot">
+            <button class="btn btn-ghost" id="entityModalCancel" type="button">Cancel</button>
+            <button class="btn btn-primary" id="entityModalSubmit" type="submit" form="entityForm">Save</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="confirmModal" aria-hidden="true">
+    <div class="modal-card confirm-card">
+        <div class="modal-head">
+            <h3>Delete record</h3>
+            <button class="icon-btn" id="confirmModalClose" type="button" aria-label="Close confirm">x</button>
+        </div>
+        <p id="confirmText">Are you sure?</p>
+        <div class="modal-foot">
+            <button class="btn btn-ghost" id="confirmCancel" type="button">Cancel</button>
+            <button class="btn btn-danger" id="confirmDelete" type="button">Delete</button>
+        </div>
+    </div>
+</div>
+
+<div id="toastStack" class="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
+<script src="./app.js"></script>
+</body>
+</html>
